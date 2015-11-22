@@ -1,7 +1,11 @@
 #! /usr/bin/env python
+
 # implements parts of the xstroke algorithm described here:
 # https://www.usenix.org/legacy/events/usenix03/tech/freenix03/full_papers/worth/worth_html/xstroke.html
 # for data model, assumes (0,0) is in upper left corner
+
+symbols = []
+loadAlphabet()
 
 def getGesture(points):
     points = interpolateGaps(points)
@@ -9,6 +13,15 @@ def getGesture(points):
     subboxes = classifyPoints(box, points)
     gesture = classifyGesture(subboxes)
     return gesture
+
+def getBox(points):
+    points = interpolateGaps(points)
+    box = generateBox(points)
+    # min(x), min(y), max(x), max(y)
+    return [ [box[0], box[1]],
+             [box[2], box[1]],
+             [box[0], box[3]],
+             [box[2], box[3]] ]
 
 def interpolateGaps(points):
     pointsFull = []
@@ -95,12 +108,62 @@ def classifyPoints(box, points):
             currVal = c
     return classification
 
-
 def classifyGesture(subboxes):
-    # pull gestures from file
-    # run regex
-    # pick winner
-    return 1
+    searchStr = "".join(subboxes)
+    symbol = None
+    for sym in symbols:
+        match = re.match(sym['regex'], searchStr)
+        if match:
+            symbol = sym
+            break
+
+    if not symbol:
+        raise Exception('No symbol was matched')
+    if 'key' in symbol:
+        print "Key: " + symbol['key']
+        return symbol['key']
+    else:
+        print "Name: " + symbol['name']
+        return symbol['name']
+    
+
+def classifyGestures(subboxes):
+    searchStr = "".join(subboxes)
+    matchings = []
+    for sym in symbols:
+        match = re.match(sym['regex'], searchStr)
+        if match:
+            matchings.append(sym)
+
+    results = []
+    for sym in matchings:
+        if 'key' in sym:
+            results.append(sym['key'])
+            print "Key: " + sym['key']
+        else:
+            results.append(sym['name'])
+            print "Name: " + sym['name']
+
+    if not results:
+        raise Exception('No symbols were matched')
+
+    return results
+
+def loadAlphabet():
+    alphabet = None
+    with open('alphabet.json') as data_file:    
+        alphabet = json.load(data_file)
+    if not alphabet:
+        raise Exception('Alphabet not loaded')
+
+    if 'letters_adv' in alphabet:
+        symbols = symbols.extend(alphabet['letters_adv'])
+    if 'numbers_adv' in alphabet:
+        symbols = symbols.extend(alphabet['numbers_adv'])
+    if 'punctuation_adv' in alphabet:
+        symbols = symbols.extend(alphabet['punctuation_adv'])
+    if not symbols:
+        raise Exception('Alphabet not loaded')
 
 # (1, 0, -1)
 def compare(p1, p2):
