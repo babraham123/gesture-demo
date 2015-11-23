@@ -4,8 +4,8 @@
 # https://www.usenix.org/legacy/events/usenix03/tech/freenix03/full_papers/worth/worth_html/xstroke.html
 # for data model, assumes (0,0) is in upper left corner
 
+import json, re
 symbols = []
-loadAlphabet()
 
 def getGesture(points):
     points = interpolateGaps(points)
@@ -150,18 +150,21 @@ def classifyGestures(subboxes):
     return results
 
 def loadAlphabet():
-    alphabet = None
-    with open('alphabet.json') as data_file:    
+    global symbols
+    symbols = []
+    alphabet = {}
+    with open('alphabet.json') as data_file:
         alphabet = json.load(data_file)
+        data_file.close()
     if not alphabet:
         raise Exception('Alphabet not loaded')
 
     if 'letters_adv' in alphabet:
-        symbols = symbols.extend(alphabet['letters_adv'])
+        symbols = symbols + alphabet['letters_adv']
     if 'numbers_adv' in alphabet:
-        symbols = symbols.extend(alphabet['numbers_adv'])
+        symbols = symbols + alphabet['numbers_adv']
     if 'punctuation_adv' in alphabet:
-        symbols = symbols.extend(alphabet['punctuation_adv'])
+        symbols = symbols + alphabet['punctuation_adv'] 
     if not symbols:
         raise Exception('Alphabet not loaded')
 
@@ -175,5 +178,5 @@ def compare(p1, p2):
         return 0
 
 
-
+loadAlphabet()
 
