@@ -50,41 +50,45 @@
 
     function getGesture(callback) {
         console.log("Calling server: \n" + JSON.stringify(pixels));
-        var url = "" + document.location.origin + "/gesture/gesture";
         $.ajax({
             type: "POST",
-            url: url,
-            data: {'points': pixels},
+            url: "/gesture/gesture",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({'points': pixels}),
             success: function (data, status, jqxhr) {
-                console.log(JSON.stringify(data));
-                console.log(status);
+                console.log("Response: " + JSON.stringify(data) + ", Status: " + status);
                 if (data.hasOwnProperty('error')) {
-                    alert(JSON.stringify(data.error));
+                    console.log("API Error: " + JSON.stringify(data.error));
                 } else {
                     callback(data.symbol);
                 }
             },
-            dataType: 'json'
+            failure: function(error) {
+                console.log("Error: " + JSON.stringify(error));
+            }
         });
     }
 
     function getBox(callback) {
         console.log("Calling server: \n" + JSON.stringify(pixels));
-        var url = "" + document.location.origin + "/gesture/box";
         $.ajax({
             type: "POST",
-            url: url,
-            data: {'points': pixels},
+            url: "/gesture/box",
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({'points': pixels}),
             success: function (data, status, jqxhr) {
-                console.log(JSON.stringify(data));
-                console.log(status);
+                console.log("Response: " + JSON.stringify(data) + ", Status: " + status);
                 if (data.hasOwnProperty('error')) {
-                    alert(JSON.stringify(data.error));
+                    console.log("API Error: " + JSON.stringify(data.error));
                 } else {
                     callback(data.corners);
                 }
             },
-            dataType: 'json'
+            failure: function(error) {
+                console.log("Error: " + JSON.stringify(error));
+            }
         });
     }
 
