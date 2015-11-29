@@ -20,6 +20,9 @@
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         ctx.fillStyle = "black";
+        ctx.font = '200px serif';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
         var rect = canvas.getBoundingClientRect();
         bounds.x = rect.left;
         bounds.y = rect.top;
@@ -125,9 +128,7 @@
     }
 
     function drawSymbol(symbol) {
-        ctx.font = '100px Lucida';
-        ctx.textAlign = "center";
-        ctx.strokeText(symbol, canvas.width/2, canvas.height/2);
+        ctx.strokeText(symbol, 10, 10);
     }
 
     function drawBox(box) {
