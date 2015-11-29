@@ -87,6 +87,7 @@
         if (data.hasOwnProperty('error')) {
             console.log("API Error: " + JSON.stringify(data.error));
         } else if (data.hasOwnProperty(key)) {
+            console.log(key + ": " + JSON.stringify(data[key]));
             callback(data[key]);
         } else {
             console.log("Unknown: " + JSON.stringify(data))

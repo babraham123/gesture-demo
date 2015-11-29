@@ -1,0 +1,19 @@
+# virtual host using mix of IP-, name-, and port-based configuration
+# from the django app, mysite, running on gunicorn
+
+server {
+    listen       80;
+    server_name  bereketabraham.com;
+
+    access_log  /var/log/nginx/mysite.log;
+    error_log  /var/log/nginx/mysite.error.log;
+
+    location /gesture/public/ {
+        root /home/babraham/mygesture;
+    }
+
+    location /gesture {
+        proxy_pass http://localhost:8005/;
+    }
+}
+
