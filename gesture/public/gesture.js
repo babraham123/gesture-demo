@@ -20,7 +20,6 @@
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         ctx.fillStyle = "black";
-        ctx.font = '100pt Lucida';
         var rect = canvas.getBoundingClientRect();
         bounds.x = rect.left;
         bounds.y = rect.top;
@@ -31,6 +30,9 @@
         clearbtn = $('#clearbtn');
         clearbtn.click(function() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pixels = [];
+            last = {x: -1, y: -1};
+            mouseDown = false;
         });
 
         classifybtn = $('#classifybtn');
@@ -123,7 +125,9 @@
     }
 
     function drawSymbol(symbol) {
-        ctx.fillText(symbol, 50, 200);
+        ctx.font = '100px Lucida';
+        ctx.textAlign = "center";
+        ctx.strokeText(symbol, canvas.width/2, canvas.height/2);
     }
 
     function drawBox(box) {
