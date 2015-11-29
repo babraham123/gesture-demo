@@ -53,19 +53,14 @@
         $.ajax({
             type: "POST",
             url: "/gesture/gesture",
-            dataType: 'json',
+            dataType: "json",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({'points': pixels}),
+            data: JSON.stringify({"points": pixels}),
             success: function (data, status, jqxhr) {
-                console.log("Response: " + JSON.stringify(data) + ", Status: " + status);
-                if (data.hasOwnProperty('error')) {
-                    console.log("API Error: " + JSON.stringify(data.error));
-                } else {
-                    callback(data.symbol);
-                }
+                getResult(data, 'symbol', callback);
             },
-            failure: function (error) {
-                console.log("Error: " + JSON.stringify(error));
+            error: function (e) {
+                console.log("Error: " + JSON.stringify(e));
             }
         });
     }
@@ -74,22 +69,28 @@
         console.log("Calling server: \n" + JSON.stringify(pixels));
         $.ajax({
             type: "POST",
-            url: "" + document.location.origin + "/gesture/box",
+            url: "/gesture/box",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({"points": pixels}),
             success: function (data, status, jqxhr) {
-                console.log("Response: " + JSON.stringify(data) + ", Status: " + status);
-                if (data.hasOwnProperty('error')) {
-                    console.log("API Error: " + JSON.stringify(data.error));
-                } else {
-                    callback(data.corners);
-                }
+                getResult(data, 'corners', callback);
             },
             error: function (e) {
                 console.log("Error: " + JSON.stringify(e));
             }
         });
+    }
+
+    function getResult(data, key, callback) {
+        //console.log("Response: " + JSON.stringify(data));
+        if (data.hasOwnProperty('error')) {
+            console.log("API Error: " + JSON.stringify(data.error));
+        } else if (data.hasOwnProperty(key)) {
+            callback(data[key]);
+        } else {
+            console.log("Unknown: " + JSON.stringify(data))
+        }
     }
 
     function addMouseEvents() {
