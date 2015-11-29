@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import json
 from gesture_control import getGesture, getBox
 app = Flask(__name__)
@@ -23,13 +23,16 @@ def gesture_api():
 def box_api():
     msg = {'service':'box'}
     try:
-        data = json.loads(request.form['points'])
+        #data = json.loads(request.form['points'])
+        data = request.get_json(force=True)
+        data = data['points']
         result = getBox(data)
     except Exception as ex:
         msg['error'] = str(ex)
     else:
         msg['corners'] = result
-    return json.dumps(msg)
+    #return json.dumps(msg)
+    return jsonify(msg)
 
 # static content
 #@app.route('/<path:path>')
