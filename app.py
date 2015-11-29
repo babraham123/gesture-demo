@@ -11,7 +11,8 @@ def top():
 def gesture_api():
     msg = {'service':'gesture'}
     try:
-        result = getGesture(request.form['points'])
+        data = json.loads(request.form['points'])
+        result = getGesture(data)
     except Exception as ex:
         msg['error'] = str(ex)
     else:
@@ -22,7 +23,8 @@ def gesture_api():
 def box_api():
     msg = {'service':'box'}
     try:
-        result = getBox(request.form['points'])
+        data = json.loads(request.form['points'])
+        result = getBox(data)
     except Exception as ex:
         msg['error'] = str(ex)
     else:
