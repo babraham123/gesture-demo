@@ -9,7 +9,7 @@ def top():
 
 @app.route('/gesture', methods=['POST', 'GET'])
 def gesture_api():
-    msg = {}
+    msg = {'service':'gesture'}
     try:
         result = getGesture(request.form['points'])
     except Exception as ex:
@@ -20,7 +20,7 @@ def gesture_api():
 
 @app.route('/box', methods=['POST', 'GET'])
 def box_api():
-    msg = {}
+    msg = {'service':'box'}
     try:
         result = getBox(request.form['points'])
     except Exception as ex:

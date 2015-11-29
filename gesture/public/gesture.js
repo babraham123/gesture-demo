@@ -51,7 +51,7 @@
     // TODO: implement and test
     function getGesture(callback) {
         console.log("Calling server: \n" + JSON.stringify(pixels));
-        var url = "" + document.location.origin + ":8005/gesture";
+        var url = "" + document.location.origin + "/gesture/gesture";
         $.ajax({
             type: "POST",
             url: url,
@@ -68,7 +68,7 @@
     // TODO: implement and test
     function getBox(callback) {
         console.log("Calling server: \n" + JSON.stringify(pixels));
-        var url = "" + document.location.origin + ":8005/box";
+        var url = "" + document.location.origin + "/gesture/box";
         $.ajax({
             type: "POST",
             url: url,
