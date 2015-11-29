@@ -64,7 +64,7 @@
                     callback(data.symbol);
                 }
             },
-            failure: function(error) {
+            failure: function (error) {
                 console.log("Error: " + JSON.stringify(error));
             }
         });
@@ -74,10 +74,10 @@
         console.log("Calling server: \n" + JSON.stringify(pixels));
         $.ajax({
             type: "POST",
-            url: "/gesture/box",
-            dataType: 'json',
+            url: "" + document.location.origin + "/gesture/box",
+            dataType: "json",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({'points': pixels}),
+            data: JSON.stringify({"points": pixels}),
             success: function (data, status, jqxhr) {
                 console.log("Response: " + JSON.stringify(data) + ", Status: " + status);
                 if (data.hasOwnProperty('error')) {
@@ -86,8 +86,8 @@
                     callback(data.corners);
                 }
             },
-            failure: function(error) {
-                console.log("Error: " + JSON.stringify(error));
+            error: function (e) {
+                console.log("Error: " + JSON.stringify(e));
             }
         });
     }
