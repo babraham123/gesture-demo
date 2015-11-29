@@ -109,6 +109,7 @@ def classifyPoints(box, points):
     return classification
 
 def classifyGesture(subboxes):
+    subboxes = map(lambda x: str(x), subboxes)
     searchStr = "".join(subboxes)
     symbol = None
     for sym in symbols:
@@ -128,6 +129,7 @@ def classifyGesture(subboxes):
     
 
 def classifyGestures(subboxes):
+    subboxes = map(lambda x: str(x), subboxes)
     searchStr = "".join(subboxes)
     matchings = []
     for sym in symbols:
@@ -146,8 +148,8 @@ def classifyGestures(subboxes):
 
     if not results:
         raise Exception('No symbols were matched')
-
     return results
+
 
 def loadAlphabet():
     global symbols

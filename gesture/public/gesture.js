@@ -48,7 +48,6 @@
         });
     }
 
-    // TODO: implement and test
     function getGesture(callback) {
         console.log("Calling server: \n" + JSON.stringify(pixels));
         var url = "" + document.location.origin + "/gesture/gesture";
@@ -57,15 +56,18 @@
             url: url,
             data: {'points': pixels},
             success: function (data, status, jqxhr) {
-                console.log(data.toString());
+                console.log(JSON.stringify(data));
                 console.log(status);
-                callback(data.symbol);
+                if (data.hasOwnProperty('error')) {
+                    alert(JSON.stringify(data.error));
+                } else {
+                    callback(data.symbol);
+                }
             },
             dataType: 'json'
         });
     }
 
-    // TODO: implement and test
     function getBox(callback) {
         console.log("Calling server: \n" + JSON.stringify(pixels));
         var url = "" + document.location.origin + "/gesture/box";
@@ -74,9 +76,13 @@
             url: url,
             data: {'points': pixels},
             success: function (data, status, jqxhr) {
-                console.log(data.toString());
+                console.log(JSON.stringify(data));
                 console.log(status);
-                callback(data.corners);
+                if (data.hasOwnProperty('error')) {
+                    alert(JSON.stringify(data.error));
+                } else {
+                    callback(data.corners);
+                }
             },
             dataType: 'json'
         });
@@ -92,10 +98,11 @@
         }, false);
 
         canvas.addEventListener('mousemove', function(mEvent) {
-            var x = mEvent.clientX - bounds.x;
-            var y = mEvent.clientY - bounds.y;
+            //var x = mEvent.clientX - bounds.x;
+            //var y = mEvent.clientY - bounds.y;
             if (mouseDown === true) {
-                setPixel(x, y);
+                var pos = getPosition(mEvent);
+                setPixel(pos.x, pos.y);
             }
         }, false);
     }
@@ -110,7 +117,7 @@
     }
 
     function drawSymbol(symbol) {
-        ctx.fillText(symbol, 50, 50);
+        ctx.fillText(symbol, 50, 200);
     }
 
     function drawBox(box) {
@@ -158,6 +165,27 @@
         ctx.lineTo(pt2[0], pt2[1]);
         ctx.stroke();
     }
+
+    function getPosition(e) {
+        //this section is from http://www.quirksmode.org/js/events_properties.html
+        var targ;
+        if (!e)
+            e = window.event;
+        if (e.target)
+            targ = e.target;
+        else if (e.srcElement)
+            targ = e.srcElement;
+        if (targ.nodeType == 3) // defeat Safari bug
+            targ = targ.parentNode;
+
+        // jQuery normalizes the pageX and pageY
+        // pageX,Y are the mouse positions relative to the document
+        // offset() returns the position of the element relative to the document
+        var x = e.pageX - $(targ).offset().left;
+        var y = e.pageY - $(targ).offset().top;
+
+        return {"x": x, "y": y};
+    };
 
     init();
 })();
