@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def top():
-    return '{"message":"Gesture Control API"}'
+    return json.dumps({"message":"Gesture Control API"})
 
 @app.route('/gesture', methods=['POST', 'GET'])
 def gesture_api():
@@ -30,10 +30,10 @@ def box_api():
     return json.dumps(msg)
 
 # static content
-@app.route('/<path:path>')
-def static_proxy(path):
-  return app.send_static_file(path)
+#@app.route('/<path:path>')
+#def static_proxy(path):
+#  return app.send_static_file(path)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8005)
+    app.run(port=8005)
 
