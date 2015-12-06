@@ -40,9 +40,14 @@ def fillGap(p0, p1):
     points = []
     dx = x1 - x0 
     dy = y1 - y0 
+
+    # if points equal
+    if x0 == x1 and y0 == y1:
+        return [p0]
+
     # special case for a vertical line
     if dx == 0:
-        y = range(y0, y1)
+        y = range(y0, y1, compare(y1, y0))
         points = [[x0, yi] for yi in y]
         return points
 
@@ -51,7 +56,7 @@ def fillGap(p0, p1):
     y = y0
     dy = compare(y1, y0)
 
-    for x in range(x0, x1):
+    for x in range(x0, x1, compare(x1, x0)):
         points.append([x, y])
         error += derror
         while error >= 0.5:
